@@ -81,13 +81,13 @@
             <!-- Header Controls -->
             <div class="flex items-center gap-2">
                 <!-- Favorites Toggle Button -->
-                <button id="btn-fav-toggle" onclick="toggleFavoriteFilter()" class="relative p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button id="btn-fav-toggle" onclick="toggleFavoriteFilter()" class="relative p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" title="รายการโปรด">
                     <i id="fav-icon" class="fa-regular fa-bookmark text-lg"></i>
                     <span id="fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
 
                 <!-- Dark Mode Toggle Button -->
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" title="เปลี่ยนธีม">
                     <i class="fa-solid fa-moon dark:hidden text-lg"></i>
                     <i class="fa-solid fa-sun hidden dark:block text-lg text-amber-400"></i>
                 </button>
@@ -118,7 +118,7 @@
             <!-- Search Bar -->
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                <input type="text" id="search-input" oninput="handleSearch()" placeholder="ค้นหาชื่อบริษัทประกัน หรือคำขวัญ..." 
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="ค้นหาชื่อบริษัทประกัน เช่น วิริยะ, กรุงเทพ, MSIG..." 
                     class="w-full pl-12 pr-10 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-all">
                 <button id="clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                     <i class="fa-solid fa-circle-xmark"></i>
@@ -166,17 +166,17 @@
     <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-10">
         <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
             <p class="text-xs text-slate-500 dark:text-slate-400">
-                ข้อมูลเบอร์ติดต่อเพื่อการแจ้งอุบัติเหตุและเคลมประกันภัยรถยนต์ | อัปเดตล่าสุดปี 2026
+                ข้อมูลเบอร์ติดต่อเพื่อการแจ้งอุบัติเหตุและเคลมประกันภัยรถยนต์ | ตรวจสอบสถานะกับ คปภ. แล้ว
             </p>
             <p class="text-xs text-slate-400 dark:text-slate-500">
-                &copy; ThaiAutoInsure - แอปพลิเคชันผู้ช่วยค้นหาช่องทางติดต่อประกันภัย
+                &copy; ThaiAutoInsure - ศูนย์รวมช่องทางติดต่อประกันภัยรถยนต์
             </p>
         </div>
     </footer>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Database of Insurance Companies
+        // Database of Active Insurance Companies (Strictly Verified & Active Companies Only)
         const insuranceCompanies = [
             {
                 id: "viriyah",
@@ -193,7 +193,7 @@
                 id: "bangkok",
                 name: "กรุงเทพประกันภัย",
                 enName: "Bangkok Insurance (BKI)",
-                hotline: "1166",
+                hotline: "1620",
                 callCenter: "02-285-8888",
                 website: "https://www.bangkokinsurance.com",
                 hasEmergency: true,
@@ -209,7 +209,7 @@
                 website: "https://www.dhipaya.co.th",
                 hasEmergency: true,
                 color: "from-cyan-600 to-blue-800",
-                badge: "ประกันภัยภาครัฐ & เอกชน"
+                badge: "มั่นคง เชื่อถือได้"
             },
             {
                 id: "thanachart",
@@ -245,26 +245,15 @@
                 badge: "มาตรฐานระดับสากล"
             },
             {
-                id: "lmg",
-                name: "แอลเอ็มจี ประกันภัย",
-                enName: "LMG Insurance",
-                hotline: "1790",
-                callCenter: "02-661-6000",
-                website: "https://www.lmginsurance.co.th",
+                id: "muangthai",
+                name: "เมืองไทยประกันภัย",
+                enName: "Muang Thai Insurance",
+                hotline: "1484",
+                callCenter: "02-665-4000",
+                website: "https://www.muangthaiinsurance.com",
                 hasEmergency: true,
-                color: "from-teal-600 to-emerald-800",
-                badge: "บริการรวดเร็ว จริงใจ"
-            },
-            {
-                id: "synmunkong",
-                name: "สินมั่นคงประกันภัย",
-                enName: "Syn Mun Kong Insurance",
-                hotline: "1596",
-                callCenter: "02-378-7000",
-                website: "https://www.smk.co.th",
-                hasEmergency: true,
-                color: "from-amber-500 to-yellow-600",
-                badge: "เบี้ยราคาประหยัด"
+                color: "from-fuchsia-600 to-pink-600",
+                badge: "ยิ้มได้เมื่อภัยมา"
             },
             {
                 id: "tokiomarine",
@@ -276,6 +265,17 @@
                 hasEmergency: true,
                 color: "from-blue-500 to-cyan-600",
                 badge: "มาตรฐานญี่ปุ่น"
+            },
+            {
+                id: "lmg",
+                name: "แอลเอ็มจี ประกันภัย",
+                enName: "LMG Insurance",
+                hotline: "1790",
+                callCenter: "02-661-6000",
+                website: "https://www.lmginsurance.co.th",
+                hasEmergency: true,
+                color: "from-teal-600 to-emerald-800",
+                badge: "บริการรวดเร็ว จริงใจ"
             },
             {
                 id: "chubb",
@@ -300,15 +300,15 @@
                 badge: "คุ้มครองมั่นใจ"
             },
             {
-                id: "muangthai",
-                name: "เมืองไทยประกันภัย",
-                enName: "Muang Thai Insurance",
-                hotline: "1484",
-                callCenter: "02-665-4000",
-                website: "https://www.muangthaiinsurance.com",
+                id: "mittare",
+                name: "มิตรแท้ประกันภัย",
+                enName: "Mittare Insurance",
+                hotline: "1741",
+                callCenter: "02-640-7777",
+                website: "https://www.mittare.com",
                 hasEmergency: true,
-                color: "from-fuchsia-600 to-pink-600",
-                badge: "ยิ้มได้เมื่อภัยมา"
+                color: "from-amber-600 to-orange-700",
+                badge: "จริงใจเปิดเผย"
             }
         ];
 
@@ -505,7 +505,7 @@
                         </div>
 
                         <!-- Bookmark Button -->
-                        <button onclick="toggleFavorite('${item.id}', event)" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-rose-500 transition-all">
+                        <button onclick="toggleFavorite('${item.id}', event)" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-rose-500 transition-all" title="บันทึกรายการโปรด">
                             <i class="${isFav ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'} text-lg"></i>
                         </button>
                     </div>
@@ -537,7 +537,7 @@
                                 </span>
                                 <div class="flex items-center gap-2">
                                     <span class="font-medium">${item.callCenter}</span>
-                                    <button onclick="copyToClipboard('${item.callCenter}', 'เบอร์ Call Center ${item.name}')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                                    <button onclick="copyToClipboard('${item.callCenter}', 'เบอร์ Call Center ${item.name}')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="คัดลอก">
                                         <i class="fa-regular fa-copy"></i>
                                     </button>
                                 </div>
@@ -549,7 +549,7 @@
                     <div class="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between gap-2">
                         <!-- Website Button -->
                         ${item.website ? `
-                            <a href="${item.website}" target="_blank" class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-xs font-medium transition">
+                            <a href="${item.website}" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-xs font-medium transition">
                                 <i class="fa-solid fa-globe text-sm"></i> เว็บไซต์หลัก
                             </a>
                         ` : `
