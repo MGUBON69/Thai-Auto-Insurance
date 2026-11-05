@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="th" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ศูนย์รวมช่องทางติดต่อบริษัทประกันภัยรถยนต์ - Insurance Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 text-white dark:bg-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-green-400 dark:text-green-600 text-lg"></i>
+        <span id="toast-message" class="text-sm font-medium">คัดลอกข้อความสำเร็จ</span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-car-burst text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">ThaiAutoInsure</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">ศูนย์รวมเบอร์เคลม & ช่องทางติดต่อประกันภัย</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center gap-2">
+                <!-- Favorites Toggle Button -->
+                <button id="btn-fav-toggle" onclick="toggleFavoriteFilter()" class="relative p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i id="fav-icon" class="fa-regular fa-bookmark text-lg"></i>
+                    <span id="fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+
+                <!-- Dark Mode Toggle Button -->
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-lg text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+        <!-- Hero & Emergency Hotline Alert -->
+        <section class="bg-gradient-to-br from-red-500 via-rose-600 to-pink-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-rose-500/10 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="relative z-10 space-y-3 max-w-2xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ฉุกเฉิน / แจ้งอุบัติเหตุตลอด 24 ชม.
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold">เกิดเหตุฉุกเฉิน? ค้นหาเบอร์เคลมประกันด่วน</h2>
+                <p class="text-white/80 text-sm font-light">รวบรวมเบอร์โทรตรงและช่องทางติดต่อ บริษัทประกันภัยรถยนต์ชั้นนำทั่วประเทศ กดโทรออกได้ทันที</p>
+            </div>
+        </section>
+
+        <!-- Search & Filter Controls -->
+        <section class="space-y-4">
+            <!-- Search Bar -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="ค้นหาชื่อบริษัทประกัน หรือคำขวัญ..." 
+                    class="w-full pl-12 pr-10 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-all">
+                <button id="clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-sm">
+                <button onclick="setFilter('all')" id="filter-all" class="filter-btn active px-4 py-2 rounded-xl border border-blue-600 bg-blue-600 text-white font-medium whitespace-nowrap transition-all shadow-sm">
+                    ทั้งหมด (<span id="count-all">0</span>)
+                </button>
+                <button onclick="setFilter('emergency')" id="filter-emergency" class="filter-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-300 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-phone-volume text-rose-500 mr-1.5"></i>แจ้งอุบัติเหตุ 24h
+                </button>
+                <button onclick="setFilter('website')" id="filter-website" class="filter-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-300 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-globe text-blue-500 mr-1.5"></i>มีเว็บไซต์
+                </button>
+            </div>
+        </section>
+
+        <!-- Active Filter Indicator Status -->
+        <div id="filter-status" class="hidden flex items-center justify-between px-2 text-sm text-slate-500 dark:text-slate-400">
+            <span>ผลการค้นหาสำหรับ: <strong id="filter-status-text" class="text-slate-800 dark:text-white"></strong></span>
+            <button onclick="resetFilters()" class="text-blue-600 dark:text-blue-400 hover:underline text-xs font-medium">ล้างการกรอง</button>
+        </div>
+
+        <!-- Insurance Company Cards Grid -->
+        <section id="company-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Cards generated dynamically via JavaScript -->
+        </section>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center space-y-3">
+            <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 text-2xl">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">ไม่พบข้อมูลบริษัทประกันภัย</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs">ลองเปลี่ยนคำค้นหา หรือล้างตัวกรองเพื่อดูรายการทั้งหมด</p>
+            <button onclick="resetFilters()" class="mt-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-700 transition">ล้างการค้นหา</button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-10">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+                ข้อมูลเบอร์ติดต่อเพื่อการแจ้งอุบัติเหตุและเคลมประกันภัยรถยนต์ | อัปเดตล่าสุดปี 2026
+            </p>
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                &copy; ThaiAutoInsure - แอปพลิเคชันผู้ช่วยค้นหาช่องทางติดต่อประกันภัย
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database of Insurance Companies
+        const insuranceCompanies = [
+            {
+                id: "viriyah",
+                name: "วิริยะประกันภัย",
+                enName: "Viriyah Insurance",
+                hotline: "1557",
+                callCenter: "02-123-4567",
+                website: "https://www.viriyah.co.th",
+                hasEmergency: true,
+                color: "from-blue-600 to-indigo-700",
+                badge: "อันดับ 1 ตลาดประกันภัย"
+            },
+            {
+                id: "bangkok",
+                name: "กรุงเทพประกันภัย",
+                enName: "Bangkok Insurance (BKI)",
+                hotline: "1166",
+                callCenter: "02-285-8888",
+                website: "https://www.bangkokinsurance.com",
+                hasEmergency: true,
+                color: "from-sky-500 to-blue-700",
+                badge: "ความคุ้มครองมาตรฐาน"
+            },
+            {
+                id: "dhipaya",
+                name: "ทิพยประกันภัย",
+                enName: "Dhipaya Insurance",
+                hotline: "1736",
+                callCenter: "02-239-2200",
+                website: "https://www.dhipaya.co.th",
+                hasEmergency: true,
+                color: "from-cyan-600 to-blue-800",
+                badge: "ประกันภัยภาครัฐ & เอกชน"
+            },
+            {
+                id: "thanachart",
+                name: "ธนชาตประกันภัย",
+                enName: "Thanachart Insurance",
+                hotline: "02-662-8999",
+                callCenter: "02-662-8999",
+                website: "https://www.thanachartinsurance.co.th",
+                hasEmergency: true,
+                color: "from-orange-500 to-red-600",
+                badge: "เด่นเรื่องประกันชั้น 1 & 2+"
+            },
+            {
+                id: "roojai",
+                name: "รู้ใจประกันภัย",
+                enName: "Roojai Insurance",
+                hotline: "02-582-8844",
+                callCenter: "02-582-8888",
+                website: "https://www.roojai.com",
+                hasEmergency: true,
+                color: "from-violet-600 to-purple-800",
+                badge: "ประกันออนไลน์ เคลมไว"
+            },
+            {
+                id: "msig",
+                name: "เอ็ม เอส ไอ จี ประกันภัย",
+                enName: "MSIG Insurance",
+                hotline: "1259",
+                callCenter: "02-007-9000",
+                website: "https://www.msig-thai.com",
+                hasEmergency: true,
+                color: "from-rose-600 to-red-700",
+                badge: "มาตรฐานระดับสากล"
+            },
+            {
+                id: "lmg",
+                name: "แอลเอ็มจี ประกันภัย",
+                enName: "LMG Insurance",
+                hotline: "1790",
+                callCenter: "02-661-6000",
+                website: "https://www.lmginsurance.co.th",
+                hasEmergency: true,
+                color: "from-teal-600 to-emerald-800",
+                badge: "บริการรวดเร็ว จริงใจ"
+            },
+            {
+                id: "synmunkong",
+                name: "สินมั่นคงประกันภัย",
+                enName: "Syn Mun Kong Insurance",
+                hotline: "1596",
+                callCenter: "02-378-7000",
+                website: "https://www.smk.co.th",
+                hasEmergency: true,
+                color: "from-amber-500 to-yellow-600",
+                badge: "เบี้ยราคาประหยัด"
+            },
+            {
+                id: "tokiomarine",
+                name: "โตเกียวมารีนประกันภัย",
+                enName: "Tokio Marine Insurance",
+                hotline: "02-686-8616",
+                callCenter: "02-686-8888",
+                website: "https://www.tokiomarine.com/th",
+                hasEmergency: true,
+                color: "from-blue-500 to-cyan-600",
+                badge: "มาตรฐานญี่ปุ่น"
+            },
+            {
+                id: "chubb",
+                name: "ชับบ์สามัคคีประกันภัย",
+                enName: "Chubb Samaggi Insurance",
+                hotline: "1758",
+                callCenter: "02-611-4000",
+                website: "https://www.chubb.com/th-th",
+                hasEmergency: true,
+                color: "from-slate-700 to-slate-900",
+                badge: "เครือข่ายระดับโลก"
+            },
+            {
+                id: "siamcity",
+                name: "สยามซิตี้ประกันภัย",
+                enName: "Siam City Insurance",
+                hotline: "02-207-2400",
+                callCenter: "02-207-2400",
+                website: "https://www.siamcityinsurance.com",
+                hasEmergency: true,
+                color: "from-indigo-600 to-blue-900",
+                badge: "คุ้มครองมั่นใจ"
+            },
+            {
+                id: "muangthai",
+                name: "เมืองไทยประกันภัย",
+                enName: "Muang Thai Insurance",
+                hotline: "1484",
+                callCenter: "02-665-4000",
+                website: "https://www.muangthaiinsurance.com",
+                hasEmergency: true,
+                color: "from-fuchsia-600 to-pink-600",
+                badge: "ยิ้มได้เมื่อภัยมา"
+            }
+        ];
+
+        // App State Management
+        let favorites = JSON.parse(localStorage.getItem('fav_insurance')) || [];
+        let currentFilter = 'all'; // 'all', 'emergency', 'website', 'favorites'
+        let searchQuery = '';
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            updateCountBadges();
+            renderCards();
+        });
+
+        // Dark Mode Controller
+        function initDarkMode() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Favorites Controller
+        function toggleFavorite(id, event) {
+            event.stopPropagation();
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('ถอนออกจากรายการโปรดแล้ว');
+            } else {
+                favorites.push(id);
+                showToast('บันทึกเป็นรายการโปรดแล้ว');
+            }
+            localStorage.setItem('fav_insurance', JSON.stringify(favorites));
+            updateCountBadges();
+            renderCards();
+        }
+
+        function toggleFavoriteFilter() {
+            if (currentFilter === 'favorites') {
+                setFilter('all');
+            } else {
+                setFilter('favorites');
+            }
+        }
+
+        // Filter & Search Logic
+        function setFilter(filterType) {
+            currentFilter = filterType;
+            
+            // Update UI Active Filter Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                btn.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border-slate-200', 'dark:border-slate-700');
+            });
+
+            const favBtn = document.getElementById('btn-fav-toggle');
+            const favIcon = document.getElementById('fav-icon');
+
+            if (filterType === 'favorites') {
+                favBtn.classList.add('bg-rose-50', 'dark:bg-rose-950/30', 'border-rose-300', 'text-rose-600');
+                favIcon.className = "fa-solid fa-bookmark text-lg text-rose-500";
+            } else {
+                favBtn.classList.remove('bg-rose-50', 'dark:bg-rose-950/30', 'border-rose-300', 'text-rose-600');
+                favIcon.className = "fa-regular fa-bookmark text-lg";
+
+                const activeBtn = document.getElementById(`filter-${filterType}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border-slate-200', 'dark:border-slate-700');
+                    activeBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                }
+            }
+
+            updateFilterStatus();
+            renderCards();
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('search-input');
+            const clearBtn = document.getElementById('clear-search');
+            searchQuery = input.value.trim().toLowerCase();
+            
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            
+            updateFilterStatus();
+            renderCards();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            searchQuery = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            updateFilterStatus();
+            renderCards();
+        }
+
+        function resetFilters() {
+            clearSearch();
+            setFilter('all');
+        }
+
+        function updateFilterStatus() {
+            const statusDiv = document.getElementById('filter-status');
+            const statusText = document.getElementById('filter-status-text');
+            
+            let status = [];
+            if (searchQuery) status.push(`"${searchQuery}"`);
+            if (currentFilter === 'emergency') status.push('แจ้งอุบัติเหตุ 24h');
+            if (currentFilter === 'website') status.push('มีเว็บไซต์');
+            if (currentFilter === 'favorites') status.push('รายการโปรด');
+
+            if (status.length > 0) {
+                statusText.textContent = status.join(' + ');
+                statusDiv.classList.remove('hidden');
+            } else {
+                statusDiv.classList.add('hidden');
+            }
+        }
+
+        function updateCountBadges() {
+            document.getElementById('count-all').textContent = insuranceCompanies.length;
+            const favBadge = document.getElementById('fav-badge');
+            if (favorites.length > 0) {
+                favBadge.textContent = favorites.length;
+                favBadge.classList.remove('hidden');
+            } else {
+                favBadge.classList.add('hidden');
+            }
+        }
+
+        // Render Cards View
+        function renderCards() {
+            const grid = document.getElementById('company-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Filter Data
+            const filtered = insuranceCompanies.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) ||
+                                      item.enName.toLowerCase().includes(searchQuery) ||
+                                      item.hotline.includes(searchQuery);
+
+                let matchesFilter = true;
+                if (currentFilter === 'emergency') matchesFilter = item.hasEmergency;
+                if (currentFilter === 'website') matchesFilter = !!item.website;
+                if (currentFilter === 'favorites') matchesFilter = favorites.includes(item.id);
+
+                return matchesSearch && matchesFilter;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            grid.innerHTML = filtered.map(item => {
+                const isFav = favorites.includes(item.id);
+                return `
+                <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden group">
+                    
+                    <!-- Card Top Header -->
+                    <div class="p-5 pb-4 border-b border-slate-100 dark:border-slate-700/50 flex items-start justify-between relative">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${item.color} flex items-center justify-center text-white text-xl font-bold shadow-md">
+                                ${item.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    ${item.name}
+                                </h3>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">${item.enName}</p>
+                            </div>
+                        </div>
+
+                        <!-- Bookmark Button -->
+                        <button onclick="toggleFavorite('${item.id}', event)" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-rose-500 transition-all">
+                            <i class="${isFav ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'} text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Card Body Info -->
+                    <div class="p-5 space-y-4 flex-grow">
+                        <!-- Emergency Call Box -->
+                        <div class="bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40 rounded-2xl p-3.5 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] font-semibold tracking-wider text-rose-600 dark:text-rose-400 uppercase block">แจ้งอุบัติเหตุ / เคลมด่วน 24 ชม.</span>
+                                <span class="text-xl font-extrabold text-rose-700 dark:text-rose-300">${item.hotline}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="copyToClipboard('${item.hotline}', 'เบอร์แจ้งอุบัติเหตุ ${item.name}')" class="p-2.5 rounded-xl bg-white dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white shadow-sm border border-slate-200 dark:border-slate-700 transition" title="คัดลอกเบอร์">
+                                    <i class="fa-regular fa-copy text-sm"></i>
+                                </button>
+                                <a href="tel:${item.hotline}" class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-medium text-xs flex items-center gap-1.5 shadow-md shadow-rose-600/20 transition">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <span>โทรออก</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Contact Details List -->
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between text-slate-600 dark:text-slate-400 py-1 border-b border-dashed border-slate-100 dark:border-slate-700/50">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-headset text-slate-400"></i> Call Center
+                                </span>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-medium">${item.callCenter}</span>
+                                    <button onclick="copyToClipboard('${item.callCenter}', 'เบอร์ Call Center ${item.name}')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer External Links -->
+                    <div class="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between gap-2">
+                        <!-- Website Button -->
+                        ${item.website ? `
+                            <a href="${item.website}" target="_blank" class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-xs font-medium transition">
+                                <i class="fa-solid fa-globe text-sm"></i> เว็บไซต์หลัก
+                            </a>
+                        ` : `
+                            <span class="w-full text-center py-2 text-[11px] text-slate-400 italic">ไม่มีเว็บไซต์</span>
+                        `}
+                    </div>
+
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Copy to Clipboard Action
+        function copyToClipboard(text, label) {
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
+        }
+
+        // Toast Notification System
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
