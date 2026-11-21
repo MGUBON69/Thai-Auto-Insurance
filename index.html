@@ -54,6 +54,40 @@
         .dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+
+        /* Logo Styles */
+        .company-logo-wrapper {
+            width: 3.5rem;    /* w-14 */
+            height: 3.5rem;   /* h-14 */
+            min-width: 3.5rem;
+            border-radius: 1rem; /* rounded-2xl */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .company-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 0.35rem; /* เพิ่ม padding ให้โลโก้ไม่ชิดขอบ */
+        }
+        /* ปรับ brightness สำหรับโลโก้ที่เป็นสีดำใน dark mode */
+        .dark .company-logo.auto-invert {
+            filter: brightness(0) invert(1);
+        }
+        /* Fallback (เมื่อไม่มีโลโก้) */
+        .logo-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
@@ -176,12 +210,16 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Database of Active Insurance Companies (Strictly Verified & Active Companies Only)
+        // Database of Active Insurance Companies
+        // 💡 ใส่ URL ของโลโก้ใน field "logo" ได้เลย (รองรับ .png, .svg, .jpg)
+        // ถ้าใส่ลิงก์ไม่ได้ ให้ปล่อยเป็นค่าว่าง "" ระบบจะ fallback เป็นตัวอักษรอัตโนมัติ
         const insuranceCompanies = [
             {
                 id: "viriyah",
                 name: "วิริยะประกันภัย",
                 enName: "Viriyah Insurance",
+                logo: "", // ตัวอย่าง: "https://upload.wikimedia.org/wikipedia/th/..."
+                autoInvert: false, // เปิดเมื่อโลโก้เป็นสีดำล้วน
                 hotline: "1557",
                 callCenter: "02-123-4567",
                 website: "https://www.viriyah.co.th",
@@ -193,6 +231,8 @@
                 id: "bangkok",
                 name: "กรุงเทพประกันภัย",
                 enName: "Bangkok Insurance (BKI)",
+                logo: "",
+                autoInvert: false,
                 hotline: "1620",
                 callCenter: "02-285-8888",
                 website: "https://www.bangkokinsurance.com",
@@ -204,6 +244,8 @@
                 id: "dhipaya",
                 name: "ทิพยประกันภัย",
                 enName: "Dhipaya Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1736",
                 callCenter: "02-239-2200",
                 website: "https://www.dhipaya.co.th",
@@ -215,6 +257,8 @@
                 id: "thanachart",
                 name: "ธนชาตประกันภัย",
                 enName: "Thanachart Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "02-662-8999",
                 callCenter: "02-662-8999",
                 website: "https://www.thanachartinsurance.co.th",
@@ -226,6 +270,8 @@
                 id: "roojai",
                 name: "รู้ใจประกันภัย",
                 enName: "Roojai Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "02-582-8844",
                 callCenter: "02-582-8888",
                 website: "https://www.roojai.com",
@@ -237,6 +283,8 @@
                 id: "msig",
                 name: "เอ็ม เอส ไอ จี ประกันภัย",
                 enName: "MSIG Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1259",
                 callCenter: "02-007-9000",
                 website: "https://www.msig-thai.com",
@@ -248,6 +296,8 @@
                 id: "muangthai",
                 name: "เมืองไทยประกันภัย",
                 enName: "Muang Thai Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1484",
                 callCenter: "02-665-4000",
                 website: "https://www.muangthaiinsurance.com",
@@ -259,6 +309,8 @@
                 id: "tokiomarine",
                 name: "โตเกียวมารีนประกันภัย",
                 enName: "Tokio Marine Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "02-686-8616",
                 callCenter: "02-686-8888",
                 website: "https://www.tokiomarine.com/th",
@@ -270,6 +322,8 @@
                 id: "lmg",
                 name: "แอลเอ็มจี ประกันภัย",
                 enName: "LMG Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1790",
                 callCenter: "02-661-6000",
                 website: "https://www.lmginsurance.co.th",
@@ -281,6 +335,8 @@
                 id: "chubb",
                 name: "ชับบ์สามัคคีประกันภัย",
                 enName: "Chubb Samaggi Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1758",
                 callCenter: "02-611-4000",
                 website: "https://www.chubb.com/th-th",
@@ -292,6 +348,8 @@
                 id: "siamcity",
                 name: "สยามซิตี้ประกันภัย",
                 enName: "Siam City Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "02-207-2400",
                 callCenter: "02-207-2400",
                 website: "https://www.siamcityinsurance.com",
@@ -303,6 +361,8 @@
                 id: "mittare",
                 name: "มิตรแท้ประกันภัย",
                 enName: "Mittare Insurance",
+                logo: "",
+                autoInvert: false,
                 hotline: "1741",
                 callCenter: "02-640-7777",
                 website: "https://www.mittare.com",
@@ -314,8 +374,33 @@
 
         // App State Management
         let favorites = JSON.parse(localStorage.getItem('fav_insurance')) || [];
-        let currentFilter = 'all'; // 'all', 'emergency', 'website', 'favorites'
+        let currentFilter = 'all';
         let searchQuery = '';
+
+        // Helper: สร้าง HTML สำหรับ Logo (ใช้ img หรือ fallback)
+        function renderLogo(item) {
+            if (item.logo && item.logo.trim() !== '') {
+                // มี URL โลโก้ -> แสดงเป็น <img>
+                return `
+                    <div class="company-logo-wrapper bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">
+                        <img src="${item.logo}" 
+                             alt="โลโก้ ${item.name}" 
+                             class="company-logo ${item.autoInvert ? 'auto-invert' : ''}"
+                             onerror="this.parentElement.innerHTML='<div class=\\'logo-fallback bg-gradient-to-tr ${item.color}\\'>${item.name.charAt(0)}</div>'"
+                        />
+                    </div>
+                `;
+            } else {
+                // ไม่มี URL โลโก้ -> fallback เป็นอักษรตัวแรก + gradient
+                return `
+                    <div class="company-logo-wrapper">
+                        <div class="logo-fallback bg-gradient-to-tr ${item.color} shadow-md">
+                            ${item.name.charAt(0)}
+                        </div>
+                    </div>
+                `;
+            }
+        }
 
         // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
@@ -324,7 +409,6 @@
             renderCards();
         });
 
-        // Dark Mode Controller
         function initDarkMode() {
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -343,7 +427,6 @@
             }
         }
 
-        // Favorites Controller
         function toggleFavorite(id, event) {
             event.stopPropagation();
             const index = favorites.indexOf(id);
@@ -367,11 +450,9 @@
             }
         }
 
-        // Filter & Search Logic
         function setFilter(filterType) {
             currentFilter = filterType;
             
-            // Update UI Active Filter Buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
                 btn.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300', 'border-slate-200', 'dark:border-slate-700');
@@ -456,12 +537,10 @@
             }
         }
 
-        // Render Cards View
         function renderCards() {
             const grid = document.getElementById('company-grid');
             const emptyState = document.getElementById('empty-state');
             
-            // Filter Data
             const filtered = insuranceCompanies.filter(item => {
                 const matchesSearch = item.name.toLowerCase().includes(searchQuery) ||
                                       item.enName.toLowerCase().includes(searchQuery) ||
@@ -487,15 +566,14 @@
 
             grid.innerHTML = filtered.map(item => {
                 const isFav = favorites.includes(item.id);
+                const logoHTML = renderLogo(item);
                 return `
                 <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden group">
                     
                     <!-- Card Top Header -->
                     <div class="p-5 pb-4 border-b border-slate-100 dark:border-slate-700/50 flex items-start justify-between relative">
                         <div class="flex items-center gap-3.5">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${item.color} flex items-center justify-center text-white text-xl font-bold shadow-md">
-                                ${item.name.charAt(0)}
-                            </div>
+                            ${logoHTML}
                             <div>
                                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                     ${item.name}
@@ -547,7 +625,6 @@
 
                     <!-- Card Footer External Links -->
                     <div class="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between gap-2">
-                        <!-- Website Button -->
                         ${item.website ? `
                             <a href="${item.website}" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-xs font-medium transition">
                                 <i class="fa-solid fa-globe text-sm"></i> เว็บไซต์หลัก
@@ -562,7 +639,6 @@
             }).join('');
         }
 
-        // Copy to Clipboard Action
         function copyToClipboard(text, label) {
             const dummy = document.createElement("textarea");
             document.body.appendChild(dummy);
@@ -574,7 +650,6 @@
             showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
         }
 
-        // Toast Notification System
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
